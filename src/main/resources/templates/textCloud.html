@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="shortcut icon" href="favicon.ico">
+<link href="css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+<link href="css/font-awesome.css?v=4.4.0" rel="stylesheet">
+<link href="css/animate.css" rel="stylesheet">
+<link href="css/style.css?v=4.1.0" rel="stylesheet">
+<script src="js/jquery.min.js?v=2.1.4"></script>
+<script src="js/bootstrap.min.js?v=3.3.6"></script>
+
+<script src="js/echarts.min.js"></script>
+<script src="js/echarts-wordcloud.min.js"></script>
+<title>Insert title here</title>
+
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content animated fadeInRight">
+		<div class="row">
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>工单热点分析词云</h5>
+						<div class="ibox-tools">
+						
+							
+							<a class="close-link">数据更新时间:<i id="update_charCloud"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+						<div style="height: 440px" id="echarts-charCloud-chart"></div>
+					</div>
+				</div>
+			</div>
+			<div class="col-sm-6">
+				<div class="ibox float-e-margins">
+					<div class="ibox-title">
+						<h5>工单热点分析饼图</h5>
+						<div class="ibox-tools">
+							
+							<a class="close-link">数据更新时间:<i id="update_pie"></i>
+							</a>
+						</div>
+					</div>
+					<div class="ibox-content">
+
+						<div style="height: 440px" id="echarts-pie-chart"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		var chart = echarts.init(document
+				.getElementById('echarts-charCloud-chart'));
+		var chart1 = echarts.init(document.getElementById('echarts-pie-chart'));
+		var option = {
+			tooltip : {
+				show : true
+			},
+			series : [ {
+				type : 'wordCloud',
+				gridSize : 2,
+				sizeRange : [ 12, 50 ],
+				rotationRange : [ -90, 90 ],
+				shape : 'pentagon',
+				width : 600,
+				height : 330,
+				textStyle : {
+					normal : {
+						color : function() {
+							return 'rgb('
+									+ [ Math.round(Math.random() * 160),
+											Math.round(Math.random() * 160),
+											Math.round(Math.random() * 160) ]
+											.join(',') + ')';
+						}
+					},
+					emphasis : {
+						shadowBlur : 110,
+						shadowColor : '#333'
+					}
+				},
+				data : [
+
+				]
+			} ]
+		};
+
+		var option1 = {
+			tooltip : {
+				trigger : 'item',
+				formatter : "{a} <br/>{b} : {c} ({d}%)"
+			},
+			legend : {
+				type : 'scroll',
+				orient : 'vertical',
+				right : 10,
+				top : 20,
+				bottom : 20,
+				data : []
+			},
+			series : [ {
+				name : '工单来源',
+				type : 'pie',
+				radius : [ '50%', '70%' ],
+				avoidLabelOverlap : false,
+				label : {
+					normal : {
+						show : false,
+						position : 'center'
+					},
+					emphasis : {
+						show : true,
+						textStyle : {
+							fontSize : '20',
+							fontWeight : 'bold'
+						}
+					}
+				},
+				labelLine : {
+					normal : {
+						show : false
+					}
+				},
+				data : []
+			} ]
+		};
+	</script>
+	<script type="text/javascript">
+		function readData() {
+			chart.showLoading({
+				text : '数据获取中...',
+				effect : 'whirling'
+			});
+			chart1.showLoading({
+				text : '数据获取中...',
+				effect : 'whirling'
+			});
+			$.ajax({
+				url : 'work',
+				type : 'get',
+				success : function(data) {
+					console.info(data[0].update_time);
+					$("#update_pie").html(data[0].update_time);
+					$("#update_charCloud").html(data[0].update_time);
+					option.series[0].data = data;
+					option1.series[0].data = data;
+					chart.setOption(option);
+					chart1.setOption(option1);
+					chart.hideLoading();
+					chart1.hideLoading();
+				}
+			});
+
+		}
+
+		$(document).ready(function() {
+			readData();
+		});
+	</script>
+</body>
+</html>
