@@ -20,4 +20,9 @@ public class KfController {
 	public List<Map<String, Object>> getWorkOrderQuestionNum() {
 		return service.getWorkOrderQuestionNum("2016-11-15~2017-03-15");
 	}
+	
+	@RequestMapping(path="/workTask",method=RequestMethod.GET)
+	public Map<String,Object> getWorkOrderTask(){
+		return service.getWorkOrderTask("2016-11-15", "2017-03-15");
+	}
 }

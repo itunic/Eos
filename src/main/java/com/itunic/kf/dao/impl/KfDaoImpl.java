@@ -20,4 +20,11 @@ public class KfDaoImpl implements KfDao {
 		return jdbcTemplate.queryForList("select concat_ws('~',start_time,end_time) as update_time, question as name,num as value from t_kf_workerorder_questiontype where result_date =?", date);
 	}
 
+	@Override
+	public List<Map<String, Object>> getWorkOrderTask(String start, String end) {
+		// TODO Auto-generated method stub
+		String sql = "select call_time,task_name as name , num as value,update_time from t_kf_wokerorder_task_count where call_time >=? and call_time <= ? order by call_time";
+		return jdbcTemplate.queryForList(sql,start,end);
+	}
+
 }
