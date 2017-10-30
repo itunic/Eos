@@ -1,7 +1,6 @@
 package com.itunic.kf.service.impl;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -12,7 +11,6 @@ import java.util.stream.Collectors;
 
 import javax.annotation.Resource;
 
-import org.springframework.boot.autoconfigure.jdbc.metadata.TomcatDataSourcePoolMetadata;
 import org.springframework.stereotype.Service;
 
 import com.itunic.kf.dao.KfDao;
